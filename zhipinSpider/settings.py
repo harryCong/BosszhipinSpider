@@ -43,6 +43,15 @@ DEFAULT_REQUEST_HEADERS = {
   'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36'
 }
 
+SCHEDULER = "scrapy_redis.scheduler.Scheduler"
+
+DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
+
+SCHEDULER_PERSIST = True
+
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
@@ -51,9 +60,11 @@ DEFAULT_REQUEST_HEADERS = {
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'zhipinSpider.middlewares.ZhipinspiderDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+   'zhipinSpider.middlewares.IPPOOLS': 125,
+   "scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware":123,
+}
+
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
@@ -65,6 +76,7 @@ DEFAULT_REQUEST_HEADERS = {
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    'zhipinSpider.pipelines.ZhipinspiderPipeline': 300,
+   'scrapy_redis.pipelines.RedisPipeline':400,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
